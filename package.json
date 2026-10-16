@@ -1,0 +1,30 @@
+{
+  "name": "api_lojade_esportes",
+  "version": "1.0.0",
+  "description": "Criação de uma API com o objetivo de utilizar sql e js, com aplicação em uma loja de material esportivo",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emanuel444-easy/api_lojaDe_esportes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/emanuel444-easy/api_lojaDe_esportes/issues"
+  },
+  "homepage": "https://github.com/emanuel444-easy/api_lojaDe_esportes#readme",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "ejs": "^7.0.1",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
