@@ -1,0 +1,37 @@
+
+### 1. Listar todos os produtos
+GET http://localhost:3000/produtos
+
+### 2. Buscar produto pelo ID
+GET http://localhost:3000/produtos/1
+
+### 3. Cadastrar um produto
+POST http://localhost:3000/produtos
+Content-Type: application/json
+
+{
+  "id_lojista": 1,
+  "id_categoria": 1,
+  "nome": "Bola de basquete teste",
+  "descricao": "Produto para testar a API",
+  "preco": 149.90,
+  "estoque": 10
+}
+
+
+### 4. Atualizar produto
+PUT http://localhost:3000/produtos/11
+Content-Type: application/json
+
+{
+  "id_lojista": 1,
+  "id_categoria": 1,
+  "nome": "Bola de basquete atualizada",
+  "descricao": "Produto atualizado pelo REST Client",
+  "preco": 159.90,
+  "estoque": 15
+}
+
+
+### 5. Excluir produto de teste
+DELETE http://localhost:3000/produtos/11
