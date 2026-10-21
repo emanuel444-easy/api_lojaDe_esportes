@@ -19,6 +19,9 @@ app.get('/', (req, res) => {
 const produtoRoutes = require('./routes/produtoRoutes');
 app.use('/produtos', produtoRoutes);
 
+const categoriaRoutes = require('./routes/categoriaRoutes');
+app.use('/categorias', categoriaRoutes);
+
 const PORT = 3000;
 
 app.listen(PORT, () => {
