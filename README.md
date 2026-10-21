@@ -119,4 +119,4 @@ A estrutura acima destaca os diretórios e arquivos usados pelo projeto; os arqu
 
 ## Objetivo do projeto
 
-Praticar a construção de uma API back-end, a integração com banco de dados relacional SQLite e o uso de rotas HTTP para operações CRUD.
+Praticar a construção de uma API back-end, a integração com banco de dados relacional SQLite e o uso de rotas HTTP para operações CRUD

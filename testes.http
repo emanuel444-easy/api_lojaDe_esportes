@@ -20,7 +20,7 @@ Content-Type: application/json
 
 
 ### 4. Atualizar produto
-PUT http://localhost:3000/produtos/11
+PUT http://localhost:3000/produtos/12
 Content-Type: application/json
 
 {
@@ -34,4 +34,5 @@ Content-Type: application/json
 
 
 ### 5. Excluir produto de teste
-DELETE http://localhost:3000/produtos/11
+DELETE http://localhost:3000/produtos/14
+
