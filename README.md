@@ -113,6 +113,17 @@ Os endpoints do carrinho usam o ID do cliente na URL:
 
 Se a quantidade não for enviada ao adicionar um produto, será usado `1`. O carrinho não permite adicionar mais unidades do que há em estoque.
 
+## Avaliações de produtos
+
+| Método HTTP | Endpoint | Descrição |
+|---|---|---|
+| GET | `/avaliacoes/produto/:id_produto` | Lista avaliações e média do produto |
+| POST | `/avaliacoes` | Cria avaliação (`id_cliente`, `id_produto`, `nota` e `comentario` opcional) |
+| PUT | `/avaliacoes/:id_avaliacao` | Atualiza a nota e o comentário |
+| DELETE | `/avaliacoes/:id_avaliacao` | Exclui uma avaliação |
+
+A nota deve ser um número inteiro entre 1 e 5. A consulta do produto retorna as avaliações, a média das notas e a quantidade de avaliações.
+
 ## Tratamento de erros
 
 Rotas que não existem retornam `404` com a mensagem `Rota não encontrada.`. Erros internos não tratados retornam `500` com uma mensagem genérica, enquanto o detalhe do erro é registrado no console do servidor.

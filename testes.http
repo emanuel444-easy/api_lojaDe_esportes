@@ -87,3 +87,29 @@ Content-Type: application/json
 
 ### Remover produto do carrinho
 DELETE http://localhost:3000/carrinho/1/1
+
+### Listar avaliações de um produto
+GET http://localhost:3000/avaliacoes/produto/1
+
+### Criar avaliação
+POST http://localhost:3000/avaliacoes
+Content-Type: application/json
+
+{
+  "id_cliente": 1,
+  "id_produto": 1,
+  "nota": 5,
+  "comentario": "Produto excelente!"
+}
+
+### Atualizar avaliação
+PUT http://localhost:3000/avaliacoes/1
+Content-Type: application/json
+
+{
+  "nota": 4,
+  "comentario": "Produto muito bom."
+}
+
+### Excluir avaliação
+DELETE http://localhost:3000/avaliacoes/1

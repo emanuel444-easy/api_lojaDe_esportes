@@ -26,6 +26,9 @@ app.use('/categorias', categoriaRoutes);
 const carrinhoRoutes = require('./carrinho/carrinho');
 app.use('/carrinho', carrinhoRoutes);
 
+const avaliacaoRoutes = require('./routes/avaliacao');
+app.use('/avaliacoes', avaliacaoRoutes);
+
 app.use(notFound);
 app.use(errorHandler);
 
