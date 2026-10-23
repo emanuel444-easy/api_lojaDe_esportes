@@ -100,6 +100,19 @@ As rotas podem ser testadas com a extensão **REST Client** do Visual Studio Cod
 
 A API valida os IDs e os dados recebidos e pode retornar códigos HTTP como `201` para cadastro realizado, `400` para dados inválidos e `404` quando o produto não é encontrado.
 
+## Carrinho de compras
+
+Os endpoints do carrinho usam o ID do cliente na URL:
+
+| Método HTTP | Endpoint | Descrição |
+|---|---|---|
+| GET | `/carrinho/:id_cliente` | Consulta o carrinho |
+| POST | `/carrinho/:id_cliente` | Adiciona um produto (`id_produto` e `quantidade`) |
+| PUT | `/carrinho/:id_cliente/:id_produto` | Altera a quantidade (`quantidade`) |
+| DELETE | `/carrinho/:id_cliente/:id_produto` | Remove um produto |
+
+Se a quantidade não for enviada ao adicionar um produto, será usado `1`. O carrinho não permite adicionar mais unidades do que há em estoque.
+
 ## Tratamento de erros
 
 Rotas que não existem retornam `404` com a mensagem `Rota não encontrada.`. Erros internos não tratados retornam `500` com uma mensagem genérica, enquanto o detalhe do erro é registrado no console do servidor.

@@ -64,3 +64,26 @@ Content-Type: application/json
 
 #### 10. Excluir categoria de teste
 DELETE http://localhost:3000/categorias/6
+
+### Consultar carrinho do cliente
+GET http://localhost:3000/carrinho/1
+
+### Adicionar produto ao carrinho
+POST http://localhost:3000/carrinho/1
+Content-Type: application/json
+
+{
+  "id_produto": 5,
+  "quantidade": 2
+}
+
+### Alterar quantidade no carrinho
+PUT http://localhost:3000/carrinho/1/1
+Content-Type: application/json
+
+{
+  "quantidade": 3
+}
+
+### Remover produto do carrinho
+DELETE http://localhost:3000/carrinho/1/1
