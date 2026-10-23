@@ -36,3 +36,31 @@ Content-Type: application/json
 ### 5. Excluir produto de teste
 DELETE http://localhost:3000/produtos/14
 
+
+
+#### 6. Listar todas as categorias
+GET http://localhost:3000/categorias
+
+#### 7. Buscar categoria pelo ID
+GET http://localhost:3000/categorias/6
+
+#### 8. Cadastrar uma categoria
+POST http://localhost:3000/categorias
+Content-Type: application/json
+
+{
+  "nome": "Categoria de teste",
+  "descricao": "Categoria criada para testar a API"
+}
+
+#### 9. Atualizar categoria
+PUT http://localhost:3000/categorias/1
+Content-Type: application/json
+
+{
+  "nome": "Categoria atualizada",
+  "descricao": "Categoria atualizada pelo REST Client"
+}
+
+#### 10. Excluir categoria de teste
+DELETE http://localhost:3000/categorias/6

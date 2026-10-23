@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
+const { notFound, errorHandler } = require('./middlewares/middlewares');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,6 +22,9 @@ app.use('/produtos', produtoRoutes);
 
 const categoriaRoutes = require('./routes/categoriaRoutes');
 app.use('/categorias', categoriaRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = 3000;
 

@@ -100,6 +100,10 @@ As rotas podem ser testadas com a extensão **REST Client** do Visual Studio Cod
 
 A API valida os IDs e os dados recebidos e pode retornar códigos HTTP como `201` para cadastro realizado, `400` para dados inválidos e `404` quando o produto não é encontrado.
 
+## Tratamento de erros
+
+Rotas que não existem retornam `404` com a mensagem `Rota não encontrada.`. Erros internos não tratados retornam `500` com uma mensagem genérica, enquanto o detalhe do erro é registrado no console do servidor.
+
 ## Estrutura principal
 
 ```text
