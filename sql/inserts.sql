@@ -1,8 +1,8 @@
--- lojista 
+-- Dados iniciais: primeiro o lojista que será referenciado pelos produtos.
 INSERT into lojista (nome, email, senha)
 VALUES ('Emanuel Do Vale', 'emanuel@gmail.com', '1234567');
 
--- clientes 
+-- Clientes usados nos exemplos de carrinho, pedidos, vendas e avaliações.
 INSERT into cliente (nome, email, senha, telefone, endereco)
 VALUES ('Samuel Contri', 'samueldamamae@gmail.com', '12345678', '88997515974', 'Rua Falesio - 420'); 
 
@@ -18,7 +18,7 @@ VALUES ('Ana Beatriz', 'anabeatriz@gmail.com', 'ana123', '88976543210', 'Rua Pad
 INSERT into cliente (nome, email, senha, telefone, endereco)
 VALUES ('Carlos Eduardo', 'carloseduardo@gmail.com', 'carlos123', '88965432109', 'Rua Coronel João - 580');
 
--- categorias
+-- Categorias que serão referenciadas pelos produtos abaixo.
 INSERT INTO categoria (nome, descricao)
 VALUES
 ('Basquete', 'Produtos para prática de basquete'),
@@ -27,7 +27,7 @@ VALUES
 ('Acessórios', 'Acessórios para atividades esportivas'),
 ('Esportes Aquáticos', 'Produtos para surf e kite-surf');
 
--- produtos 
+-- Produtos de exemplo vinculados ao primeiro lojista e às categorias cadastradas.
 INSERT INTO produto 
 (id_lojista, id_categoria, nome, descricao, preco, estoque)
 VALUES
@@ -50,7 +50,7 @@ VALUES
 (1, 5, 'Prancha de Kite-Surf', 'Prancha própria para prática de kite-surf', 1299.90, 5);
 
 
--- carrinhos 
+-- Carrinhos e itens iniciais para demonstrar a relação entre cliente e produto.
 INSERT INTO carrinho (id_cliente)
 VALUES (1);
 
@@ -60,15 +60,14 @@ values (2);
 INSERT INTO item_carrinho (id_carrinho, id_produto, quantidade)
 VALUES (1, 8, 1);
 
--- pedidos 
+-- Exemplo de pedido e venda concluídos para dados de demonstração.
 INSERT INTO pedido (id_cliente, data_pedido, status, rastreamento)
 VALUES (3, '2026-09-24', 'Processando', 'BR123456789');
 
--- venda 
 INSERT INTO venda (id_cliente, data_venda, valor_total, status)
 VALUES (3, '2026-09-24', 899.90, 'Concluída');
 
--- item_venda
+-- Itens, pagamento e avaliação associados à venda e ao produto de exemplo.
 INSERT INTO item_venda (id_venda, id_produto, quantidade, preco_unitario)
 VALUES (1, 8, 1, 899.90);
 
@@ -79,4 +78,3 @@ VALUES (1, 'PIX', 899.90, 'Pago');
 --avaliacao
 INSERT INTO avaliacao (id_cliente, id_produto, nota, comentario, data_avaliacao)
 VALUES (3, 8, 5, 'Produto muito bom e chegou em perfeito estado', '2026-09-24');
-

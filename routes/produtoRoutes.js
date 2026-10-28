@@ -4,7 +4,7 @@ const db = require('../config/database');
 
 const router = express.Router();
 
-//listar produtos//
+// Lista todos os produtos cadastrados.
 router.get('/', (req, res) => {
     const produto = db.prepare(
         'SELECT * FROM produto'
@@ -14,6 +14,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+    // Valida o identificador antes de procurar o produto.
     const id = Number(req.params.id);
 
     if (!Number.isInteger(id) || id <= 0) {
@@ -43,6 +44,7 @@ router.post('/', (req, res) => {
         estoque
     } = req.body;
 
+    // Valida os campos obrigatórios e seus tipos antes de gravar no banco.
     if (
         !Number.isInteger(Number(id_lojista)) ||
         Number(id_lojista) <= 0 ||
@@ -62,6 +64,7 @@ router.post('/', (req, res) => {
     }
 
     try {
+        // Usa parâmetros SQL para inserir os dados sem concatená-los na consulta.
         const resultado = db.prepare(`
             INSERT INTO produto
             (id_lojista, id_categoria, nome, descricao, preco, estoque)
@@ -88,7 +91,7 @@ router.post('/', (req, res) => {
     }
 });
 
-// UPDATE: atualizar um produto
+// Atualiza os dados de um produto existente.
 router.put('/:id', (req, res) => {
     const id = Number(req.params.id);
 
@@ -117,6 +120,7 @@ router.put('/:id', (req, res) => {
         estoque
     } = req.body;
 
+    // A atualização exige os mesmos campos válidos do cadastro.
     if (
         !Number.isInteger(Number(id_lojista)) ||
         Number(id_lojista) <= 0 ||
@@ -168,7 +172,7 @@ router.put('/:id', (req, res) => {
     }
 });
 
-// DELETE: excluir um produto
+// Exclui um produto usando seu ID.
 router.delete('/:id', (req, res) => {
     const id = Number(req.params.id);
 

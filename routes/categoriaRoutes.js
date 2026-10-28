@@ -3,6 +3,7 @@ const db = require('../config/database');
 
 const router = express.Router();
 
+// Lista todas as categorias cadastradas.
 router.get('/', (req, res) => {
 	const categorias = db.prepare(
 		'SELECT * FROM categoria'
@@ -12,6 +13,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+	// Converte e valida o parâmetro antes de usá-lo na consulta.
 	const id = Number(req.params.id);
 
 	if (!Number.isInteger(id) || id <= 0) {
@@ -36,6 +38,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
 	const { nome, descricao } = req.body;
 
+	// Exige um nome preenchido e, quando enviado, uma descrição textual.
 	if (
 		typeof nome !== 'string' ||
 		!nome.trim() ||
@@ -51,6 +54,7 @@ router.post('/', (req, res) => {
 		VALUES (?, ?)
 	`).run(nome.trim(), descricao ?? null);
 
+	// Retorna o registro completo, incluindo o ID gerado pelo banco.
 	const categoria = db.prepare(
 		'SELECT * FROM categoria WHERE id_categoria = ?'
 	).get(resultado.lastInsertRowid);
@@ -79,6 +83,7 @@ router.put('/:id', (req, res) => {
 
 	const { nome, descricao } = req.body;
 
+	// Mantém as mesmas regras de validação usadas no cadastro.
 	if (
 		typeof nome !== 'string' ||
 		!nome.trim() ||
@@ -111,6 +116,7 @@ router.delete('/:id', (req, res) => {
 		});
 	}
 
+	// A chave estrangeira pode impedir a exclusão quando há produtos vinculados.
 	let resultado;
 
 	try {

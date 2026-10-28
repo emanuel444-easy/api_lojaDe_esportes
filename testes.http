@@ -1,4 +1,6 @@
 
+### Exemplos de chamadas para testar os endpoints; envie cada requisição com a API em execução.
+
 ### 1. Listar todos os produtos
 GET http://localhost:3000/produtos
 

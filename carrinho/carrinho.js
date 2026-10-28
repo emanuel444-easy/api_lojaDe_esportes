@@ -3,15 +3,18 @@ const db = require('../config/database');
 const router = express.Router();
 
 function lerId(value) {
+    // Aceita somente IDs inteiros positivos antes de consultar o banco.
     const id = Number(value);
     return Number.isInteger(id) && id > 0 ? id : null;
 }
 
 function buscarCarrinho(idCliente) {
+    // Um cliente sem carrinho recebe uma lista vazia e total igual a zero.
     const carrinho = db.prepare(
         'SELECT id_carrinho FROM carrinho WHERE id_cliente = ?'
     ).get(idCliente);
 
+    // O subtotal de cada item é calculado com o preço atual do produto.
     const itens = carrinho
         ? db.prepare(`
             SELECT
@@ -34,6 +37,7 @@ function buscarCarrinho(idCliente) {
     };
 }
 
+// Retorna o registro do cliente, ou undefined quando ele não existe.
 function clienteExiste(idCliente) {
     return db.prepare(
         'SELECT 1 FROM cliente WHERE id_cliente = ?'
@@ -51,6 +55,7 @@ router.get('/:id_cliente', (req, res) => {
         return res.status(404).json({ erro: 'Cliente não encontrado.' });
     }
 
+    // Monta a resposta a partir do carrinho e de seus itens cadastrados.
     res.json(buscarCarrinho(idCliente));
 });
 
@@ -86,6 +91,7 @@ router.post('/:id_cliente', (req, res) => {
         });
     }
 
+    // Agrupa a criação do carrinho e a inclusão/atualização do item numa transação.
     const adicionarProduto = db.transaction(() => {
         let carrinho = db.prepare(
             'SELECT id_carrinho FROM carrinho WHERE id_cliente = ?'
@@ -104,6 +110,7 @@ router.post('/:id_cliente', (req, res) => {
         `).get(carrinho.id_carrinho, idProduto);
         const novaQuantidade = (item?.quantidade ?? 0) + quantidade;
 
+        // Considera também a quantidade que já estava no carrinho ao conferir o estoque.
         if (novaQuantidade > produto.estoque) {
             return false;
         }
@@ -167,6 +174,7 @@ router.put('/:id_cliente/:id_produto', (req, res) => {
         });
     }
 
+    // A substituição da quantidade só ocorre se o produto já estiver no carrinho.
     db.prepare(
         'UPDATE item_carrinho SET quantidade = ? WHERE id_itemc = ?'
     ).run(quantidade, item.id_itemc);
@@ -186,6 +194,7 @@ router.delete('/:id_cliente/:id_produto', (req, res) => {
         return res.status(404).json({ erro: 'Cliente não encontrado.' });
     }
 
+    // A exclusão é limitada ao carrinho do cliente para não remover itens de terceiros.
     const carrinho = db.prepare(
         'SELECT id_carrinho FROM carrinho WHERE id_cliente = ?'
     ).get(idCliente);

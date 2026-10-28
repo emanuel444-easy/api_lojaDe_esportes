@@ -4,6 +4,7 @@ const db = require('../config/database');
 const router = express.Router();
 
 function lerId(value) {
+    // Padroniza a leitura de IDs e rejeita valores inválidos antes das consultas.
     const id = Number(value);
     return Number.isInteger(id) && id > 0 ? id : null;
 }
@@ -23,6 +24,7 @@ router.get('/produto/:id_produto', (req, res) => {
         return res.status(404).json({ erro: 'Produto não encontrado.' });
     }
 
+    // Inclui o nome do cliente para apresentar avaliações com contexto.
     const avaliacoes = db.prepare(`
         SELECT
             avaliacao.id_avaliacao,
@@ -38,6 +40,7 @@ router.get('/produto/:id_produto', (req, res) => {
         ORDER BY avaliacao.id_avaliacao DESC
     `).all(idProduto);
 
+    // Calcula o resumo das notas separadamente da lista de avaliações.
     const resultado = db.prepare(`
         SELECT ROUND(AVG(nota), 1) AS media, COUNT(*) AS total
         FROM avaliacao
@@ -59,6 +62,7 @@ router.post('/', (req, res) => {
     const nota = Number(body.nota);
     const comentario = body.comentario ?? null;
 
+    // Valida os campos recebidos antes de consultar o banco ou gravar a avaliação.
     if (
         !idCliente ||
         !idProduto ||
@@ -93,6 +97,7 @@ router.post('/', (req, res) => {
         VALUES (?, ?, ?, ?, datetime('now'))
     `).run(idCliente, idProduto, nota, comentario?.trim() || null);
 
+    // Busca o registro recém-criado para devolver a avaliação completa na resposta.
     const avaliacao = db.prepare(
         'SELECT * FROM avaliacao WHERE id_avaliacao = ?'
     ).get(resultado.lastInsertRowid);
@@ -106,6 +111,7 @@ router.put('/:id_avaliacao', (req, res) => {
     const nota = Number(body.nota);
     const comentario = body.comentario ?? null;
 
+    // Atualizações também precisam respeitar a escala de notas e o tipo do comentário.
     if (
         !idAvaliacao ||
         !Number.isInteger(nota) ||
@@ -142,6 +148,7 @@ router.delete('/:id_avaliacao', (req, res) => {
         return res.status(400).json({ erro: 'ID da avaliação inválido.' });
     }
 
+    // O número de linhas afetadas permite identificar se a avaliação existia.
     const resultado = db.prepare(
         'DELETE FROM avaliacao WHERE id_avaliacao = ?'
     ).run(idAvaliacao);
