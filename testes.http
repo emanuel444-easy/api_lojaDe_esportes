@@ -115,3 +115,11 @@ Content-Type: application/json
 
 ### Excluir avaliação
 DELETE http://localhost:3000/avaliacoes/1
+
+
+POST http://localhost:3000/carrinho/1/cupom
+Content-Type: application/json
+
+{
+    "codigo": "BEMVINDO10"
+}

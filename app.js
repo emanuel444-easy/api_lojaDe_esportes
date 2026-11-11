@@ -26,7 +26,7 @@ app.use('/produtos', produtoRoutes);
 const categoriaRoutes = require('./routes/categoriaRoutes');
 app.use('/categorias', categoriaRoutes);
 
-const carrinhoRoutes = require('./carrinho/carrinho');
+const carrinhoRoutes = require('./routes/carrinho');
 app.use('/carrinho', carrinhoRoutes);
 
 const avaliacaoRoutes = require('./routes/avaliacao');
