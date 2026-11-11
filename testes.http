@@ -117,6 +117,7 @@ Content-Type: application/json
 DELETE http://localhost:3000/avaliacoes/1
 
 
+ ### 11. Aplicar cupom de desconto ao carrinho
 POST http://localhost:3000/carrinho/1/cupom
 Content-Type: application/json
 

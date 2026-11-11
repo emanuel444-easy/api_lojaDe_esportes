@@ -210,6 +210,90 @@ router.put("/:id_cliente/:id_produto", (req, res) => {
   res.json(buscarCarrinho(idCliente));
 });
 
+router.post("/:id_cliente/cupom", (req, res) => {
+  try {
+    const idCliente = lerId(req.params.id_cliente);
+    const { codigo } = req.body;
+
+    if (!idCliente) {
+      return res.status(400).json({
+        erro: "ID do cliente inválido.",
+      });
+    }
+
+    if (!codigo) {
+      return res.status(400).json({
+        mensagem: "Informe o código do cupom.",
+      });
+    }
+
+    const carrinhoCliente = db
+      .prepare("SELECT id_carrinho FROM carrinho WHERE id_cliente = ?")
+      .get(idCliente);
+
+    if (!carrinhoCliente) {
+      return res.status(404).json({
+        mensagem: "Carrinho não encontrado.",
+      });
+    }
+
+    const cupom = db
+      .prepare(`
+        SELECT * FROM cupom_desconto
+        WHERE codigo = ?
+      `)
+      .get(codigo);
+
+    if (!cupom) {
+      return res.status(404).json({
+        mensagem: "Cupom inválido.",
+      });
+    }
+
+    const hoje = new Date().toISOString().split("T")[0];
+
+    if (cupom.validade < hoje) {
+      return res.status(400).json({
+        mensagem: "Este cupom está vencido.",
+      });
+    }
+
+    const carrinho = db
+      .prepare(`
+        SELECT
+          SUM(p.preco * ic.quantidade) AS subtotal
+        FROM item_carrinho ic
+        JOIN produto p ON p.id_produto = ic.id_produto
+        WHERE ic.id_carrinho = ?
+      `)
+      .get(carrinhoCliente.id_carrinho);
+
+    if (!carrinho || carrinho.subtotal === null) {
+      return res.status(404).json({
+        mensagem: "Carrinho vazio.",
+      });
+    }
+
+    const valorDesconto = carrinho.subtotal * (cupom.desconto / 100);
+    const total = carrinho.subtotal - valorDesconto;
+
+    res.status(200).json({
+      mensagem: "Cupom aplicado com sucesso!",
+      cupom: cupom.codigo,
+      subtotal: carrinho.subtotal,
+      desconto_percentual: cupom.desconto,
+      valor_desconto: Number(valorDesconto.toFixed(2)),
+      total: Number(total.toFixed(2)),
+    });
+  } catch (erro) {
+    console.error(erro);
+
+    res.status(500).json({
+      mensagem: "Erro ao aplicar o cupom.",
+    });
+  }
+});
+
 router.delete("/:id_cliente/:id_produto", (req, res) => {
   const idCliente = lerId(req.params.id_cliente);
   const idProduto = lerId(req.params.id_produto);
@@ -222,79 +306,7 @@ router.delete("/:id_cliente/:id_produto", (req, res) => {
     return res.status(404).json({ erro: "Cliente não encontrado." });
   }
 
-  router.post("/:id/cupom", (req, res) => {
-    try {
-      const idCarrinho = req.params.id;
-      const { codigo } = req.body;
-
-      if (!codigo) {
-        return res.status(400).json({
-          mensagem: "Informe o código do cupom.",
-        });
-      }
-
-      const cupom = db
-        .prepare(
-          `
-            SELECT * FROM cupom_desconto
-            WHERE codigo = ?
-        `,
-        )
-        .get(codigo);
-
-      if (!cupom) {
-        return res.status(404).json({
-          mensagem: "Cupom inválido.",
-        });
-      }
-
-      const hoje = new Date().toISOString().split("T")[0];
-
-      if (cupom.validade < hoje) {
-        return res.status(400).json({
-          mensagem: "Este cupom está vencido.",
-        });
-      }
-
-      const carrinho = db
-        .prepare(
-          `
-            SELECT
-                SUM(p.preco * ic.quantidade) AS subtotal
-            FROM item_carrinho ic
-            JOIN produto p ON p.id_produto = ic.id_produto
-            WHERE ic.id_carrinho = ?
-        `,
-        )
-        .get(idCarrinho);
-
-      if (!carrinho || carrinho.subtotal === null) {
-        return res.status(404).json({
-          mensagem: "Carrinho vazio ou não encontrado.",
-        });
-      }
-
-      const valorDesconto = carrinho.subtotal * (cupom.desconto / 100);
-
-      const total = carrinho.subtotal - valorDesconto;
-
-      res.status(200).json({
-        mensagem: "Cupom aplicado com sucesso!",
-        cupom: cupom.codigo,
-        subtotal: carrinho.subtotal,
-        desconto_percentual: cupom.desconto,
-        valor_desconto: Number(valorDesconto.toFixed(2)),
-        total: Number(total.toFixed(2)),
-      });
-    } catch (erro) {
-      console.error(erro);
-
-      res.status(500).json({
-        mensagem: "Erro ao aplicar o cupom.",
-      });
-    }
-  });
-
+ 
   // A exclusão é limitada ao carrinho do cliente para não remover itens de terceiros.
   const carrinho = db
     .prepare("SELECT id_carrinho FROM carrinho WHERE id_cliente = ?")
